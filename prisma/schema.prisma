@@ -1,0 +1,43 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Get a free hosted Postgres database in seconds: `npx create-db`
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+  moduleFormat    = "cjs"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  userId          Int           @id @default(autoincrement()) @map("user_id")
+  name            String        @db.VarChar(100)
+  email           String        @unique @db.VarChar(150)
+  password        String        @db.VarChar(255)
+  createdAt       DateTime      @default(now()) @map("created_at")
+  updatedAt       DateTime      @updatedAt @map("updated_at")
+  destinations    Destination[]
+
+  @@index([userId])
+  @@index([email])
+
+  @@map("users")
+}
+
+model Destination {
+  destinationId   Int           @id @default(autoincrement()) @map("destination_id")
+  name            String        @db.VarChar(100)
+  travelDate      DateTime?     @map("travel_date")
+  notes           String?       @db.VarChar(255)
+  createdAt       DateTime      @default(now()) @map("created_at")
+  updatedAt       DateTime      @updatedAt @map("updated_at")
+  userId          Int           @map("user_id")
+  
+  user            User          @relation(fields: [userId], references: [userId])
+
+  @@map("destinations")
+}
