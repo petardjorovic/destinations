@@ -6,6 +6,7 @@ import { TweetModule } from './tweet/tweet.module';
 import { ConfigModule } from '@nestjs/config';
 import { PrismaModule } from './prisma/prisma.module';
 import { DestinationsModule } from './destinations/destinations.module';
+import { AuthModule } from './auth/auth.module';
 import envValidation from './config/env.validation';
 import appConfig from './config/app.config';
 import databaseConfig from './config/database.config';
@@ -22,6 +23,7 @@ import databaseConfig from './config/database.config';
       load: [appConfig, databaseConfig],
     }),
     PrismaModule,
+    AuthModule,
     UsersModule,
     TweetModule,
     DestinationsModule,
