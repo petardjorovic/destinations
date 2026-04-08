@@ -6,7 +6,7 @@ import { CreateDestinationDto } from './dto/create-destination.dto';
 export class DestinationsService {
   constructor(private readonly prisma: PrismaService) {}
 
-  async getDestinationsByUser(userId: number) {
+  async findAll(userId: number) {
     const existingUser = await this.prisma.user.findUnique({
       where: { userId },
     });
@@ -17,6 +17,20 @@ export class DestinationsService {
     return this.prisma.destination.findMany({
       where: { userId },
     });
+  }
+
+  async findOne(userId: number, destinationId: number) {
+    const destination = await this.prisma.destination.findFirst({
+      where: { destinationId, userId },
+    });
+
+    if (!destination) {
+      throw new NotFoundException(
+        `Destination not found with this id ${destinationId}`,
+      );
+    }
+
+    return destination;
   }
 
   createDestination(destination: CreateDestinationDto) {
